@@ -18,7 +18,7 @@ WidgetLCD lcd(V0);
 WidgetLCD lcd2(V1);
 WidgetLCD lcd3(V2);
 
-//Deklarasi Sensor
+//Deklarasi Sensor & Pin
 dht DHT;
 int pinKipas;
 int pinPompa;
@@ -27,27 +27,27 @@ float sensorPin = A0;
 
 void setup() {
 
-//pinMode(relay1, OUTPUT);
+
   Serial.begin(9600);
   Blynk.begin(auth, ssid, pass);
   
     lcd.clear();
     lcd.print(0, 0, "Temp in C");
     lcd2.clear();
-    lcd2.print(0, 0, "Humi Ruangan");
+    lcd2.print(0, 0, "Humidity");
     lcd3.clear();
-    lcd3.print(0, 0, "Manusia Tanah");
+    lcd3.print(0, 0, "Soil Humidity");
 }
 
 void loop() {
 
+//LCD Blynk
   lcd.clear();
     lcd.print(0, 0, "Temp in C");
     lcd2.clear();
-    lcd2.print(0, 0, "Humi Ruangan");
+    lcd2.print(0, 0, "Humidity Ruangan");
     lcd3.clear();
-    lcd3.print(0, 0, "Manusia Tanah");
-    //delay(3500);
+    lcd3.print(0, 0, " Soil Humidity ");
 
     //Temperature
 
@@ -59,10 +59,10 @@ void loop() {
   Serial.print("Humidity = ");
   Serial.println(DHT.humidity);
   lcd2.print(7, 1, DHT.humidity);
-  Serial.print("Manusia Tanah: ");
+  Serial.print("Kelembapan Tanah: ");
   Serial.println(soilSensor());
   lcd3.print(0, 1, soilSensor());
-//  delay(5000);
+
 
   if(pinKipas == 1){
     pinMode(relayKipas, OUTPUT);
@@ -78,18 +78,19 @@ void loop() {
     pinMode(relayPompa, INPUT);
    }
 }
-
+//Virtual Button Pompa
 BLYNK_WRITE(V3){
    pinPompa = param.asInt();
   Serial.println(pinPompa);
   }
 
-
+//Virtual Button Kipas
 BLYNK_WRITE(V4){
    pinKipas = param.asInt();
   Serial.println(pinKipas);
   }
 
+//Kelembapan Tanah
 float soilSensor(){
   float nilai = analogRead(sensorPin);
   return 1023 -  nilai;
