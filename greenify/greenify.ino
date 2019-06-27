@@ -77,6 +77,19 @@ void loop() {
    else{
     pinMode(relayPompa, INPUT);
    }
+
+   //Automatic Fan
+   if(DHT.temperature <= 45)
+   {
+     pinMode(relayPompa, OUTPUT);
+   }
+   else
+   {
+     pinMode(relayPompa, INPUT);
+   }
+
+
+   
 }
 //Virtual Button Pompa
 BLYNK_WRITE(V3){
